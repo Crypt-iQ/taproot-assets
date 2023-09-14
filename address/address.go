@@ -358,7 +358,7 @@ func (a *Tap) Decode(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	return stream.Decode(r)
+	return stream.DecodeP2P(r)
 }
 
 // EncodeAddress returns a bech32m string encoding of a Taproot Asset address.
@@ -407,18 +407,19 @@ func DecodeAddress(addr string, net *ChainParams) (*Tap, error) {
 	}
 
 	prefix := addr[:oneIndex+1]
-	if !IsBech32MTapPrefix(prefix) {
-		return nil, ErrUnsupportedHRP
-	}
+	// if !IsBech32MTapPrefix(prefix) {
+	// 	return nil, ErrUnsupportedHRP
+	// }
 
 	// The HRP is everything before the found '1'.
 	hrp := prefix[:len(prefix)-1]
 
 	// Ensure that the hrp we deocded matches the network we're trying to
 	// use the address on.
-	if !IsForNet(hrp, net) {
-		return nil, ErrMismatchedHRP
-	}
+	// if !IsForNet(hrp, net) {
+	// 	return nil, ErrMismatchedHRP
+	// }
+	_ = hrp
 
 	// At this point, the HRP is valid/known, and for the target network,
 	// so we can decode the TLV blob into an actual address struct.
